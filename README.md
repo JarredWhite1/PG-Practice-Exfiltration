@@ -1,2 +1,2 @@
-# PG-Practice-Exfiltration
-"Exfiltration" machine writeup
+# PG-Practice-Snookums
+"Snookums" machine writeup
