@@ -25,34 +25,37 @@ Project consists of performing penetration test on a Linux machine called "Snook
 
 <p align="center">
 Running Inital Nmap Fast Scan against target: <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/nmapinital.png" height="80%" width="80%" alt="nmap scan initial"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmapinital.png" height="80%" width="80%" alt="nmap scan initial"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmapAdv2.png" height="80%" width="80%" alt="nmap scan initial"/>
 <br />
 <br />
-Nmap Inital-Finding Open Ports for :  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/nmap2.png" height="80%" width="80%" alt="nmap scan initial"/>
+Nmap Advanced After finding Open Ports for 22,21,80,111,445,139,3306,33060 :  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmapAdv.png" height="80%" width="80%" alt="nmap scan initial"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmapAdv3.png" height="80%" width="80%" alt="nmap scan initial"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmap%20Adv4.png" height="80%" width="80%" alt="nmap scan initial"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/nmapadv5.png" height="80%" width="80%" alt="nmap scan initial"/>
 <br />
 <br />
-Nmap Advanced Scan to drill down and further enumerate Services: <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/nmapAdv1.png" height="80%" width="80%" alt="namp scan adv"/>
+Enumerating Smb, we find no read or write access: <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/smbnoaccess.png" height="80%" width="80%" alt="namp scan adv"/>
 <br />
 <br />
-Nmap Advanced Scan Open Ports and Services:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/nmapAdv2.png" height="80%" width="80%" alt="nmap scan adv"/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/nmapAdv3.png" height="80%" width="80%" alt="nmap scan adv"/>
+Enumerating port 80 and running gobuster concurrently We find "pdfkit version 0.8":  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/port80httpenum.png" height="80%" width="80%" alt="port 80 enumeration"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/gobusterNOTHING.png" height="80%" width="80%" alt="nmap scan adv"/>
 <br />
 <br />
-Seeing that 445 is open, we smb into shares to see what we can read or write. We find that we can read logs:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smb1.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smbclient1.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+We use searchsploit and find a python module that allows command injection, copy it to our current directory and run the exploit:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/searchsploitversionpdfkit.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/exploitRCEpython.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
-Here we can get and read the local.txt flag we also further enumerate by getting the misc.log and reading it:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smblocaltxt.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+Here we netcat on one of the used ports and find we have a shell:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/initalshellfromRCE.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smbmisclog.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
-<br />
- We find stored credentials to an application in the misc.log.  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smbmisclogadminpass.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<br />Enumerating config files we find stored Mysql credentials  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/enumconfigfiles.png" height="80%" width="80%" alt="mysql pass"/>
 <br />
 <br />
  Traveling to port 8003 in a web browser, we find the web application we can use the creds on. Further enumeration allows us to find the version of the application, "Booked 2.7.5"  <br/>
