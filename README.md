@@ -46,39 +46,45 @@ Enumerating port 80 and running gobuster concurrently We find "pdfkit version 0.
 <br />
 <br />
 We use searchsploit and find a python module that allows command injection, copy it to our current directory and run the exploit:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/RCEpdfkit.07.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/POCpayload.png" height="80%" width="80%" alt="Disk Sanitization Steps"/> 
 <img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/searchsploitversionpdfkit.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/exploitRCEpython.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
-Here we netcat on one of the used ports and find we have a shell:  <br/>
+Here we netcat on one of the ports used on the machine and find we have an initial shell:  <br/>
 <img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/initalshellfromRCE.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/smbmisclog.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
-<br />Enumerating config files we find stored Mysql credentials  <br/>
+<br />Going into /var/www/html and looking seems to be the key to finding misconfigs in websites.
+Here we find a php file with database creds in it!
+Enumerating config files we find stored Mysql credentials:  <br/>
 <img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/enumconfigfiles.png" height="80%" width="80%" alt="mysql pass"/>
 <br />
 <br />
- Traveling to port 8003 in a web browser, we find the web application we can use the creds on. Further enumeration allows us to find the version of the application, "Booked 2.7.5"  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/URLbooked.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+ Connecting to the Mysql database and further enumeration finds us hashed user credentials:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/mysqlconnectingpass.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/enummysqldatabase.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/enummysqltables.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/enummysqluserspasswords.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
- We use searchsploit and find an RCE exploit to use. We copy it with the "-m" command to the current working directory for use.  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/searchsploitBooked.png" height="80%" width="80%" alt="searchsploit"/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/bookedRCE.png" height="80%" width="80%" alt="searchsploit"/>
+ The user passwords are double encoded. I went to www.base64decode.org to decode them. We switch user to Michael:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/decodinguserspasswordsformysql.png" height="80%" width="80%" alt="searchsploit"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/SUtomichaelsacccount.png" height="80%" width="80%" alt="searchsploit"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/michaelaaccountID.png" height="80%" width="80%" alt="searchsploit"/> 
 <br />
 <br />
- We use python, entering in the creds and IP address of the target and get a low level shell:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/runningBookedRCE.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+  Michael has access to write to etc/passwd. We are going to make a new root user, making the user and password. GitRekt user made:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/writetoetcpasswordfile.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
-To get privilege escalation we find a writable script(cleanup.py). We base 64 encode a reverse shell and write it to the cleanup.py:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/Crontabuploadrevshell.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+GitRekt user made. Switching to root shell:  <br/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/gitrektusermade.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
+<img src="https://github.com/JarredWhite1/PG-Practice-Snookums/blob/main/SUrootandprooftxt.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
 <br />
 <br />
- We use netcat on our host machine to catch our root shell and proof.txt:  <br/>
-<img src="https://github.com/JarredWhite1/PG-Practice-Zino/blob/main/CatchRootshell.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-<br />
-<br />
+
 </p>
 
 <!--
